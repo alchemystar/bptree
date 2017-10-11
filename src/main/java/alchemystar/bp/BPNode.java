@@ -93,9 +93,9 @@ public class BPNode {
             // 无需分裂
             if (!isLeafSplit()) {
                 innerInsert(key);
-                if (parent != null) {
-                    parent.updateInsert(tree);
-                }
+                //                if (parent != null) {
+                //                    parent.updateInsert(tree);
+                //                }
             } else {
                 // 需要分裂
                 // 则分裂成左右两个节点
@@ -210,9 +210,9 @@ public class BPNode {
                     if (remove(key)) {
                         found = true;
                     }
-                    if (index == 0) {
-                        adjustParentEntries();
-                    }
+                    //  if (index == 0) {
+                    //      adjustParentEntries();
+                    //  }
                 } else {
                     // 如果自身关键字数小于M/2,并且前节点关键字数大于M/2,则从其处借补
                     if (canBorrow(previous)) {
@@ -385,6 +385,7 @@ public class BPNode {
         }
     }
 
+    // 这边其实没有必要调整,但调整了也不影响B+树的性质
     private void adjustParentEntries() {
         // 调整对应的关键字
         int currEntryIndex = getParentEntry(this);
@@ -584,7 +585,9 @@ public class BPNode {
         // 找到当前节点的后继节点在父节点中的parent
         int currEntryIdx = getParentEntry(this.next);
         parent.getEntries().remove(currEntryIdx);
-        parent.getEntries().add(currEntryIdx, borrowKey);
+        // 是将next的第一个上提,而不是borrowKey
+        // 由于之前remove过了,所以index还是0
+        parent.getEntries().add(currEntryIdx, next.getEntries().get(0));
     }
 
     protected void updateInsert(BPTree tree) {

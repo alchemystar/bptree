@@ -220,6 +220,26 @@ public class BTreeTest {
             printBtree(bpTree.getRoot());
         }
 
+        BPNode BPNode = bpTree.getHead();
+
+        while (BPNode.getNext() != null) {
+            BPNode = BPNode.getNext();
+        }
+        while (BPNode != null) {
+            for (int i = BPNode.getEntries().size() - 1; i >= 0; i--) {
+                // System.out.println(BPNode.getEntries().get(i));
+                Tuple tuple = bpTree.get(BPNode.getEntries().get(i));
+                bpTree.remove(tuple);
+                if (tuple == null) {
+                    System.out.println("it is null");
+                } else {
+                    System.out.println(tuple.getValues()[0]);
+                }
+            }
+            BPNode = BPNode.getPrevious();
+        }
+        printBtree(bpTree.getRoot());
+
     }
 
     public static Tuple genTuple(int i) {
